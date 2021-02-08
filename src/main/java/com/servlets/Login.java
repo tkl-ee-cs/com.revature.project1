@@ -1,7 +1,7 @@
 package com.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.servlet.RequestDispatcher;
+//import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,69 +17,90 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Servlet implementation class Login
  */
 @WebServlet("/login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	final static Logger logger = LogManager.getLogger(Login.class);
     /**
      * @see HttpServlet#HttpServlet()
      */
     public Login() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		
+//		response.getWriter().append("Served at: ").append(request.getContextPath());
+        logger.info("Enter Login() doGet");
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        logger.info("Enter Login() doPost");
 		response.setContentType("text/html");
 //		PrintWriter out = response.getWriter();
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			session.invalidate();
+		}
 		
+		//get field parameters and gets id/status/type from database
 		String name = request.getParameter("login-name");
 		String password = request.getParameter("login-pw");
-//		System.out.println("This is " + name + " " + password);
-		int valID = get_id_w_name_pw(name,password);
-		String valUser = get_status_w_id(valID);
 		
-		if((valID > 0)&(valUser.equals("active"))) {
-//			System.out.println("This is " + name + " " + password);
-//clear all session data
-			session.setAttribute("id", valID);
-			session.setAttribute("name", name);
-				
-			RequestDispatcher rd = request.getRequestDispatcher("welcome");
-			rd.forward(request, response);
-		}else if((valUser.equals("rejected"))|(valUser.equals("pending"))) {
-//invalidate session
-			request.setAttribute("danger", "...Login attempt from unapproved customer account...");
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
-		}
-		else {
-//invalidate session
-			request.setAttribute("warning", "...Username or Password does not match...");
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+		int valId = get_id_w_name_pw(name,password);
+		String userStat =  get_status_w_id(valId);
+		String userType = get_type_w_name(name);
+		
+        logger.info("This is " + name + " with a password");
+		if((valId <= 0)) { 
+			request.setAttribute("warning", "...Username/Password does not match with our records...");
+			request.getRequestDispatcher("").forward(request, response);
+			return;
+		}else if((valId > 0)&(userStat.equals("active"))) {
+			//sets the attributes id/name/status/type into request scope, leaves user/account creation to welcome servlet
+			request.setAttribute("id", valId);
+			request.setAttribute("name", name);
+			request.setAttribute("type", userType);
+			request.setAttribute("status", userStat);
+			request.getRequestDispatcher("welcome").forward(request, response);
+			return;
+		}else if((userStat.equals("rejected"))|(userStat.equals("pending"))) {
+			request.setAttribute("danger", "...Login attempt from unapproved account...");
+			request.getRequestDispatcher("").forward(request, response);
+			return;
+		}else {
+			request.setAttribute("warning", "...Issue occurred, please try again...");
+			request.getRequestDispatcher("").forward(request, response);
+			return;
 		}
 	}
-
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//GET USER ID WITH USERNAME AND PASSWORD
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	protected int get_id_w_name_pw(String name, String password) {
 		int uid = 0;
 		CallableStatement cstmt = null;
 		
-//		System.out.println("Called get_id_w_name_pw()");
+		try { //Loading the Driver, precedes first call to the database
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+        logger.info("Called get_id_w_name_pw()");
 		try(Connection connection = DriverManager.getConnection(
 				"jdbc:postgresql://localhost/bank","postgres","postgrespassword");){
 			
@@ -90,7 +111,7 @@ public class Login extends HttpServlet {
 			cstmt.setInt(3, 0);
 			cstmt.execute();
 			uid = cstmt.getInt(3);
-//			System.out.println("ID is : "+ uid + ", taking in" + name + ", " + password);
+	        logger.info("ID is : "+ uid + ", taking in " + name + ", and password");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -100,14 +121,16 @@ public class Login extends HttpServlet {
 		return uid;
 	}
 	
-
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//GET USER STATUS WITH USER ID
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	protected String get_status_w_id(int id) {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String stmt;
 		String status = null; 
-		
-//		System.out.println("Called get_status_w_id");
+			
+        logger.info("Called get_status_w_id");
 		try(Connection connection = DriverManager.getConnection(
 				"jdbc:postgresql://localhost/bank","postgres","postgrespassword");){
 			
@@ -116,7 +139,7 @@ public class Login extends HttpServlet {
 			pstmt.setInt(1,id);
 			rs = pstmt.executeQuery();
 	        while (rs.next()) {
-//	    	System.out.println(rs.getString(1));
+	            logger.info(rs.getString(1));
 	        	status = rs.getString(1);
 	        }
 	        
@@ -130,4 +153,29 @@ public class Login extends HttpServlet {
 		return status;
 	}
 	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//GET USER TYPE BY USERNAME
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	protected static String get_type_w_name(String username) {
+		String act_type = null;
+		CallableStatement cstmt = null;
+		
+        logger.info("Called get_type_w_name()");
+		try(Connection connection = DriverManager.getConnection(
+				"jdbc:postgresql://localhost/bank","postgres","postgrespassword");){
+			
+			cstmt = connection.prepareCall("CALL get_type_w_name(?,?)");
+			cstmt.setString(1,username);
+			cstmt.registerOutParameter(2, java.sql.Types.VARCHAR);
+			cstmt.setString(2, null);
+			cstmt.execute();
+			act_type = cstmt.getString(2);
+	        logger.info("Type of account is : "+ act_type);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+		    try { if (cstmt != null) cstmt.close(); } catch (Exception e) {};
+		}
+		return act_type;
+	}
 }

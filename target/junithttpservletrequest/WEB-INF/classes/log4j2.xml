@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+
+  <Properties>
+    <Property name="logdir">./src/main/resources</Property>
+    <Property name="layout">%d [%t] %-5p %c- %m%n</Property>
+  </Properties>
+  
+  <Appenders>
+    <RollingFile name="LOCALHOST"
+        fileName="${logdir}/localhost.log"
+        filePattern="${logdir}/localhost.%d{yyyy-MM-dd}-%i.log">
+      <PatternLayout pattern="${layout}"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy max="5" />
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="LOCALHOST" />
+        </Root>
+    </Loggers>
+</Configuration>

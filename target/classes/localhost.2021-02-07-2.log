@@ -1,0 +1,6 @@
+2021-02-07 21:31:10,372 [http-nio-8080-exec-3] INFO  com.servlets.Login- Enter Login() doPost
+2021-02-07 21:31:10,405 [http-nio-8080-exec-3] INFO  com.servlets.Login- Called get_id_w_name_pw()
+2021-02-07 21:31:10,419 [http-nio-8080-exec-3] INFO  com.servlets.Login- Called get_status_w_id
+2021-02-07 21:31:11,509 [http-nio-8080-exec-3] INFO  com.servlets.Login- Called get_type_w_name()
+2021-02-07 21:31:12,184 [http-nio-8080-exec-3] INFO  com.servlets.Login- Type of account is : customer
+2021-02-07 21:31:12,184 [http-nio-8080-exec-3] INFO  com.servlets.Login- This is Jane_Doe password2

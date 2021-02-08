@@ -2,24 +2,37 @@ package com.servlets;
 
 	public class BankAccount {
 		int account_id;
-		int balance;
+		float balance;
 		String status;
+		String username;
 		
-		public BankAccount(int account_id, int balance, String status) {
+		public BankAccount(int account_id, float balance, String status) {
 			super();
 			this.account_id = account_id;
 			this.balance = balance;
 			this.status = status;
+			this.username = "";
 		}
 		
+		public BankAccount(int account_id, float balance, String status, String name) {
+			super();
+			this.account_id = account_id;
+			this.balance = balance;
+			this.status = status;
+			this.username = name;
+		}
 		public int getAccount_id() {return account_id;}
-		public int getBalance() {return balance;}
+		public float getBalance() {return balance;}
 		public String getStatus() {return status;}
-		public void intoBalance(int value) {this.balance = balance + value;}
-		public String setStatus() {return status;}
-		
+		public String getUser() {return username;}
+		public void setStatus(String status) {this.status = status;}
+		public void setUser(String username) {this.username = username;}
+
 		@Override
 		public String toString() {
-			return "Account [account_id=" + account_id + ", balance=" + balance + "]";
+			return "BankAccount [account_id=" + account_id + ", balance=" + balance + ", status=" + status
+					+ ", username=" + username + "]";
 		}
+		
+		
 	}

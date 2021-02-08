@@ -1,0 +1,13 @@
+2021-02-07 22:10:46,721 [http-nio-8080-exec-3] INFO  com.servlets.Login- Enter Login() doPost
+2021-02-07 22:10:46,766 [http-nio-8080-exec-3] INFO  com.servlets.Login- Called get_id_w_name_pw()
+2021-02-07 22:10:47,879 [http-nio-8080-exec-3] INFO  com.servlets.Login- ID is : 6, taking in Jane_Doe, and password
+2021-02-07 22:10:47,882 [http-nio-8080-exec-3] INFO  com.servlets.Login- Called get_status_w_id
+2021-02-07 22:10:48,392 [http-nio-8080-exec-3] INFO  com.servlets.Login- active
+2021-02-07 22:10:48,393 [http-nio-8080-exec-3] INFO  com.servlets.Login- Called get_type_w_name()
+2021-02-07 22:10:48,817 [http-nio-8080-exec-3] INFO  com.servlets.Login- Type of account is : customer
+2021-02-07 22:10:48,819 [http-nio-8080-exec-3] INFO  com.servlets.Login- This is Jane_Doe with a password
+2021-02-07 22:11:07,294 [http-nio-8080-exec-5] INFO  com.servlets.Deposit- Enter Deposit() doGet
+2021-02-07 22:11:07,295 [http-nio-8080-exec-5] INFO  com.servlets.Deposit- Called hasBankAccount()
+2021-02-07 22:11:07,295 [http-nio-8080-exec-5] INFO  com.servlets.Deposit- Called set_account_w_deposit()
+2021-02-07 22:11:07,684 [http-nio-8080-exec-5] INFO  com.servlets.Deposit- Transaction id: 63
+2021-02-07 22:11:12,019 [http-nio-8080-exec-6] INFO  com.servlets.Logout- Enter Logout() doGet

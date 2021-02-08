@@ -1,0 +1,16 @@
+2021-02-07 21:36:36,321 [http-nio-8080-exec-2] INFO  com.servlets.Login- Enter Login() doPost
+2021-02-07 21:36:36,370 [http-nio-8080-exec-2] INFO  com.servlets.Login- Called get_id_w_name_pw()
+2021-02-07 21:36:37,540 [http-nio-8080-exec-2] INFO  com.servlets.Login- ID is : 6, taking inJane_Doe, password2
+2021-02-07 21:36:37,541 [http-nio-8080-exec-2] INFO  com.servlets.Login- Called get_status_w_id
+2021-02-07 21:36:38,029 [http-nio-8080-exec-2] INFO  com.servlets.Login- active
+2021-02-07 21:36:38,029 [http-nio-8080-exec-2] INFO  com.servlets.Login- Called get_type_w_name()
+2021-02-07 21:36:38,471 [http-nio-8080-exec-2] INFO  com.servlets.Login- Type of account is : customer
+2021-02-07 21:36:38,471 [http-nio-8080-exec-2] INFO  com.servlets.Login- This is Jane_Doe password2
+2021-02-07 21:36:56,162 [http-nio-8080-exec-4] INFO  com.servlets.Login- Enter Login() doPost
+2021-02-07 21:36:56,206 [http-nio-8080-exec-4] INFO  com.servlets.Login- Called get_id_w_name_pw()
+2021-02-07 21:36:57,022 [http-nio-8080-exec-4] INFO  com.servlets.Login- ID is : 6, taking inJane_Doe, password2
+2021-02-07 21:36:57,024 [http-nio-8080-exec-4] INFO  com.servlets.Login- Called get_status_w_id
+2021-02-07 21:36:57,455 [http-nio-8080-exec-4] INFO  com.servlets.Login- active
+2021-02-07 21:36:57,455 [http-nio-8080-exec-4] INFO  com.servlets.Login- Called get_type_w_name()
+2021-02-07 21:36:57,877 [http-nio-8080-exec-4] INFO  com.servlets.Login- Type of account is : customer
+2021-02-07 21:36:57,877 [http-nio-8080-exec-4] INFO  com.servlets.Login- This is Jane_Doe password2
